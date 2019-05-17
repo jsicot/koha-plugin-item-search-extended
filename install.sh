@@ -1,7 +1,7 @@
 DIRNAME=$(dirname $0);
 cd $DIRNAME;
 
-echo 'Definir le nom du projet :'
+echo 'Définir le nom du projet :'
 read NAME
 if [ "$NAME" = "" ]; then
     >&2 echo "Erreur: Veuillez préciser un nom de projet"
@@ -14,23 +14,32 @@ read -ra ADDR <<< "$CLEANEDNAME"
 for i in "${ADDR[@]}"; do
     PACKAGE="$PACKAGE${i^}"
 done
-echo "Definir le nom du package [$PACKAGE] :"
+echo "Définir le nom du package [$PACKAGE] :"
 read INPACKAGE
 PACKAGE=${INPACKAGE:-$PACKAGE}
 
 if [[ $PACKAGE =~ [^a-zA-Z0-9]+ ]]; then
-    >&2 echo "Erreur: Charactères non autorisés dans le nom du package"
+    >&2 echo "Erreur: Le nom du package ne doit contenir que des caractères alphanumériques"
     exit 1;
 fi
 
-PROJECT="koha-plugin-${CLEANEDNAME//[ ]/-}"
+PROJECT="${CLEANEDNAME//[ ]/-}"
 PROJECT=${PROJECT,,}
+
+echo "Définir le nom système du projet [$PROJECT] :"
+read INPROJECT
+PROJECT="koha-plugin-${INPROJECT:-$PROJECT}"
+
+if [[ $PROJECT =~ [^a-z0-9-]+ ]]; then
+    >&2 echo "Erreur: Le nom système du projet ne doit contenir que des lettres minuscules, des chiffres et des tirets"
+    exit 1;
+fi
 
 echo "Definir la version de base [1.0] :"
 read INVERSION
 VERSION=${INVERSION:-1.0}
 
-echo "Quelle version minimum de Koha est nécessaire [18.110000] :"
+echo "Quelle version minimum de Koha est nécessaire [3.120000] :"
 read INMIN_KOHA_VERSION
 MIN_KOHA_VERSION=${INMIN_KOHA_VERSION:-18.110000}
 
