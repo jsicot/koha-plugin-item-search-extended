@@ -9,14 +9,16 @@ user$ git clone git@gitlab.univ-rennes2.fr:applis-doc-plugins-koha/koha-plugin-d
 Puis executez le script `install.sh` et répondez au différentes questions posées par le script
 ```
 user$ bash ./install.sh
-Definir le nom du projet :
+Définir le nom du projet :
 Hello world
-Definir le nom du package [HelloWorld] :
+Définir le nom du package [HelloWorld] :
+
+Définir le nom système du projet [hello-world] :
 
 Definir la version de base [1.0] :
 
-Quelle version minimum de Koha est nécessaire [18.110000] :
-
+Quelle version minimum de Koha est nécessaire [3.120000] :
+18.11
 Décrire le projet :
 Pour dire bonjour au monde
 rm 'install.sh'
