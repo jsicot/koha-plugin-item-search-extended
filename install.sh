@@ -43,6 +43,12 @@ echo "Quelle version minimum de Koha est nécessaire [3.120000] :"
 read INMIN_KOHA_VERSION
 MIN_KOHA_VERSION=${INMIN_KOHA_VERSION:-18.110000}
 
+GITNAME="$(git config --get user.name)" ;
+echo "Qui est l'auteur du projet [$GITNAME] ?"
+read AUTHOR
+AUTHOR=${AUTHOR:-$GITNAME}
+AUTHOR="${AUTHOR//\'/\\\\\\\'}"
+
 echo "Décrire le projet :"
 read INDESCR
 DESCR="${INDESCR//\'/\\\\\\\'}"
@@ -68,6 +74,7 @@ NAME="${NAME//\'/\\\\\\\'}"
 
 sed -i -e "s/{PACKAGE}/$PACKAGE/g" "$FILEPATH/$FILENAME" ;
 sed -i -e "s/{NAME}/$NAME/g" "$FILEPATH/$FILENAME" ;
+sed -i -e "s/{AUTHOR}/$AUTHOR/g" "$FILEPATH/$FILENAME" ;
 sed -i -e "s/{CREATION_DATE}/$TODAY/g" "$FILEPATH/$FILENAME" ;
 sed -i -e "s/{MIN_KOHA_VERSION}/$MIN_KOHA_VERSION/g" "$FILEPATH/$FILENAME" ;
 sed -i -e "s/{DESCRIPTION}/$DESCR/g" "$FILEPATH/$FILENAME" ;

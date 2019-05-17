@@ -10,7 +10,7 @@ our $VERSION = '{VERSION}';
 ## Here is our metadata, some keys are required, some are optional
 our $metadata = {
     name            => '{NAME}',
-    author          => 'JONCOUR Gwendal',
+    author          => '{AUTHOR}',
     date_authored   => '{CREATION_DATE}',
     date_updated    => '{UPDATE_DATE}',
     minimum_version => '{MIN_KOHA_VERSION}',

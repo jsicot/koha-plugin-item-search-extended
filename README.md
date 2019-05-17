@@ -19,6 +19,8 @@ Definir la version de base [1.0] :
 
 Quelle version minimum de Koha est nécessaire [3.120000] :
 18.11
+Qui est l'auteur du projet [John Doe] ?
+Jean Dupond
 Décrire le projet :
 Pour dire bonjour au monde
 rm 'install.sh'
