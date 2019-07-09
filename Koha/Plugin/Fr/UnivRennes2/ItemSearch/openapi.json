@@ -1,0 +1,49 @@
+{
+  "/items/{item_id}": {
+    "get": {
+      "x-mojo-to": "Fr::UnivRennes2::ItemsSearch::ItemsController#get_item",
+      "operationId": "get_item",
+      "tags": ["items"],
+      "parameters": [
+        {
+          "description": "Internal identifier for items",
+          "in": "path",
+          "name": "item_id",
+          "required": true,
+          "type": "integer"
+        },
+        {
+          "name": "library_id",
+          "in": "query",
+          "description": "Internal library identifier",
+          "type": "string"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "data from an item"
+        },
+        "404": {
+          "description": "An error occured",
+          "schema": {
+              "type": "object",
+                "properties": {
+                  "error": {
+                    "description": "An explanation for the error",
+                    "type": "string"
+                  }
+                }
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "circulate": "1"
+        }
+      }
+    }
+  }
+}
