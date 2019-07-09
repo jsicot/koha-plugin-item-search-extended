@@ -39,13 +39,13 @@ use Koha::Libraries;
 use Koha::Plugin::Fr::UnivRennes2::CheckSudoc::Sudoc;
 
 
-our $VERSION = '0.3';
+our $VERSION = '{VERSION}';
 
 our $metadata = {
     name            => 'Items search plugin for Koha',
     author          => 'Julien Sicot',
     date_authored   => '2019-07-09',
-    date_updated    => '2019-07-09',
+    date_updated    => '{UPDATE_DATE}',
     minimum_version => '18.110000',
     maximum_version => undef,
     version         => $VERSION,
