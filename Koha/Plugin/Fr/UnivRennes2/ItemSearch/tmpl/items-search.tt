@@ -5,33 +5,33 @@
 
 [% BLOCK form_label %]
   [% SWITCH label %]
-    [% CASE 'barcode' %]<span>Barcode</span>
-    [% CASE 'itemcallnumber' %]<span>Call number</span>
-    [% CASE 'copynumber' %]<span>Copy number</span>
+    [% CASE 'barcode' %]<span>Code-barres</span>
+    [% CASE 'itemcallnumber' %]<span>Cote</span>
+    [% CASE 'copynumber' %]<span>Tomaison</span>
     [% CASE 'itemnotes' %]<span>Note</span>
-    [% CASE 'materials' %]<span>Materials</span>
-    [% CASE 'title' %]<span>Title</span>
-    [% CASE 'author' %]<span>Author</span>
-    [% CASE 'publishercode' %]<span>Publisher</span>
-    [% CASE 'publicationyear' %]<span>Publication date</span>
+    [% CASE 'materials' %]<span>Message retour</span>
+    [% CASE 'title' %]<span>Titre</span>
+    [% CASE 'author' %]<span>Auteur</span>
+    [% CASE 'publishercode' %]<span>Éditeur</span>
+    [% CASE 'publicationyear' %]<span>Date</span>
     [% CASE 'collectiontitle' %]<span>Collection</span>
     [% CASE 'isbn' %]<span>ISBN</span>
     [% CASE 'issn' %]<span>ISSN</span>
     [% CASE 'lccn' %]<span>PPN</span>
-    [% CASE 'homebranch' %]<span>Home Branch</span>
-    [% CASE 'holdingbranch' %]<span>Current location</span>
-    [% CASE 'All libraries' %]<span>All libraries</span>
-    [% CASE 'location' %]<span>Shelving location</span>
-    [% CASE 'All locations' %]<span>All locations</span>
-    [% CASE 'itype' %]<span>Loan duration</span>
-    [% CASE 'All loan durations' %]<span>All loan duration</span>
-    [% CASE 'itemtype' %]<span>Document type</span>
-    [% CASE 'notforloan' %]<span>Status</span>
-    [% CASE 'All statuses' %]<span>All statuses</span>
-    [% CASE 'damaged' %]<span>Damaged</span>
-    [% CASE 'itemlost' %]<span>Lost</span>
-    [% CASE 'withdrawn' %]<span>withdrawn</span>
-    [% CASE 'paidfor' %]<span>paidfor</span>
+    [% CASE 'homebranch' %]<span>Bibliothèque de rattachement</span>
+    [% CASE 'holdingbranch' %]<span>Bibliothèque actuelle</span>
+    [% CASE 'All libraries' %]<span>Toutes les bibliothèques</span>
+    [% CASE 'location' %]<span>Localisation</span>
+    [% CASE 'All locations' %]<span>Toutes les localisations</span>
+    [% CASE 'itype' %]<span>Type de prêt</span>
+    [% CASE 'All loan durations' %]<span>Tous les types de prêt</span>
+    [% CASE 'itemtype' %]<span>Type de document</span>
+    [% CASE 'notforloan' %]<span>Statut</span>
+    [% CASE 'All statuses' %]<span>Tous les statuts</span>
+    [% CASE 'damaged' %]<span>Endommagé</span>
+    [% CASE 'itemlost' %]<span>Perdu</span>
+    [% CASE 'withdrawn' %]<span>Retiré des collections</span>
+    [% CASE 'paidfor' %]<span>Chantier</span>
   [% END %]
 [% END %]
 
@@ -39,8 +39,8 @@
   <div class="form-field form-field-select">
     <label class="form-field-label" for="[% name | html %]">[% INCLUDE form_label label=name %]</label>
     <select id="[% name | html %]_op" name="[% name | html %]_op">
-      <option value="=">is</option>
-      <option value="!=" >is not</option>
+      <option value="=">est</option>
+      <option value="!=" >n'est pas</option>
     </select>
     <select id="[% name | html %]" name="[% name | html %]" multiple="multiple" size="[% options.size < 4 ? options.size + 1 : 4 | html %]">
       <option value="" selected="selected">
@@ -139,13 +139,15 @@
         <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 
     <div id="item-search-block">
-      <h1>Item search</h1>
-      <p><a href="/cgi-bin/koha/catalogue/search.pl">Go to advanced search</a></p>
-      <form action="/plugin/Koha/Plugin/Fr/UnivRennes2/ItemSearch/intranet/items-search.pl" method="get" id="itemsearchform">
+      <h1>Recherche d'exemplaires améliorée</h1>
+      <form action="/cgi-bin/koha/plugins/run.pl" method="get" id="itemsearchform">
+      <input type="hidden" name="class" value="Koha::Plugin::Fr::UnivRennes2::ItemSearch" />
+      <input type="hidden" name="action" value="searchitems" />
+      <input type="hidden" name="method" value="tool" />
           <div id="toolbar" class="btn-toolbar">
               <fieldset class="action">
                   <div class="btn-group">
-                      <button class="btn btn-default btn-sm"><i class="fa fa-search"></i> Search</button>
+                      <button class="btn btn-default btn-sm"><i class="fa fa-search"></i> Rechercher</button>
                   </div>
               </fieldset>
           </div>
@@ -183,18 +185,18 @@
           </fieldset>
           <fieldset>
             <div class="form-field">
-              <label class="form-field-label" for="itemcallnumber_from">From call number:</label>
+              <label class="form-field-label" for="itemcallnumber_from">De la cote:</label>
               <input type="text" id="itemcallnumber_from" name="itemcallnumber_from" value="" />
               <span class="hint">(inclusive)</span>
             </div>
             <div class="form-field">
-              <label class="form-field-label" for="itemcallnumber_to">To call number:</label>
+              <label class="form-field-label" for="itemcallnumber_to">À la cote:</label>
               <input type="text" id="itemcallnumber_to" name="itemcallnumber_to" value="" />
               <span class="hint">(inclusive)</span>
             </div>
             [% INCLUDE form_field_radio_yes_no name="damaged" %]
             <div class="form-field">
-              <label class="form-field-label" for="issues_op">Checkout count:</label>
+              <label class="form-field-label" for="issues_op">Total des prêts:</label>
               <select id="issues_op" name="issues_op">
                 <option value=">">&gt;</option>
                 <option value="<">&lt;</option>
@@ -204,7 +206,7 @@
               <input type="text" name="issues" />
             </div>
             <div class="form-field">
-              <label class="form-field-label" for="datelastborrowed_op">Last checkout date:</label>
+              <label class="form-field-label" for="datelastborrowed_op">Dernier emprunt:</label>
               <select id="datelastborrowed_op" name="datelastborrowed_op">
                 <option value=">">After</option>
                 <option value="<">Before</option>
@@ -214,7 +216,7 @@
               <span class="hint">ISO Format (YYYY-MM-DD)</span>
             </div>
             <div class="form-field">
-              <label class="form-field-label" for="dateaccessioned_op">Created date:</label>
+              <label class="form-field-label" for="dateaccessioned_op">Date d'entrée:</label>
               <select id="dateaccessioned_op" name="dateaccessioned_op">
                 <option value=">">After</option>
                 <option value="<">Before</option>
@@ -224,7 +226,7 @@
               <span class="hint">ISO Format (YYYY-MM-DD)</span>
             </div>
             <div class="form-field">
-              <label class="form-field-label" for="datelastseen_op">Last seen date:</label>
+              <label class="form-field-label" for="datelastseen_op">Vu en dernier:</label>
               <select id="datelastseen_op" name="datelastseen_op">
                 <option value=">">After</option>
                 <option value="<">Before</option>
@@ -235,11 +237,17 @@
             </div>
           </fieldset>
           <fieldset>
+            <div class="form-field-checkbox">
+              <label for="sudocrun">Lancer le recouvrement sudoc (plus lent):</label>
+              <input type="checkbox" id="sudocRun" name="sudocRun" value="sudocRun" /> 
+            </div>
+          </fieldset>
+          <fieldset>
             <div class="form-field-radio">
-              <label>Output:</label>
-              <input type="radio" id="format-html" name="format" value="html" checked="checked" /> <label for="format-html">Screen</label>
+              <label>Sortie:</label>
+              <input type="radio" id="format-html" name="format" value="html" checked="checked" /> <label for="format-html">html</label>
               <input type="radio" id="format-csv" name="format" value="csv" /> <label for="format-csv">CSV</label>
-              <input type="radio" id="format-barcodes" name="format" value="barcodes"/> <label for="format-barcodes">Barcodes file</label>
+              <input type="radio" id="format-barcodes" name="format" value="barcodes"/> <label for="format-barcodes">fichier code-barres</label>
             </div>
           </fieldset>
       </form>
@@ -298,31 +306,31 @@
         function submitForm($form) {
             var tr = ''
                 + '    <tr>'
-                + '      <th id="items_title">' + _("Title") + '</th>'
-                + '      <th id="items_pubdate">' + _("Publication date") + '</th>'
-                + '      <th id="items_publisher">' + _("Publisher") + '</th>'
+                + '      <th id="items_title">' + _("Titre") + '</th>'
+                + '      <th id="items_pubdate">' + _("Date") + '</th>'
+                + '      <th id="items_publisher">' + _("Éditeur") + '</th>'
                 + '      <th id="items_isbn">' + _("ISBN/ISSN") + '</th>'
                 + '      <th id="items_lccn">' + _("PPN") + '</th>'
-                + '      <th id="item_copynumber">' + _("Copy number") + '</th>'
-                + '      <th id="items_itemtype">' + _("Item type") + '</th>'
-                + '      <th id="items_barcode">' + _("Barcode") + '</th>'
-                + '      <th id="items_callno">' + _("Call number") + '</th>'
-                + '      <th id="items_homebranch">' + _("Home library") + '</th>'
-                + '      <th id="items_holdingbranch">' + _("Current location") + '</th>'
-                + '      <th id="items_location">' + _("Shelving location") + '</th>'
-				+ '      <th id="items_itype">' + _("Loan duration") + '</th>'
-                + '      <th id="items_status">' + _("Status") + '</th>'
-                + '      <th id="items_itemlost">' + _("Lost") + '</th>'
-                + '      <th id="items_withdrawn">' + _("Withdrawn") + '</th>'
-                + '      <th id="items_paidfor">' + _("Paidfor") + '</th>'
+                + '      <th id="item_copynumber">' + _("Tomaison") + '</th>'
+                + '      <th id="items_itemtype">' + _("Type") + '</th>'
+                + '      <th id="items_barcode">' + _("Code-barres") + '</th>'
+                + '      <th id="items_callno">' + _("Cote") + '</th>'
+                + '      <th id="items_homebranch">' + _("Bibliothèque de rattachement") + '</th>'
+                + '      <th id="items_holdingbranch">' + _("Bibliothèque actuelle") + '</th>'
+                + '      <th id="items_location">' + _("Localisation") + '</th>'
+				+ '      <th id="items_itype">' + _("Type de prêt") + '</th>'
+                + '      <th id="items_status">' + _("Statut") + '</th>'
+                + '      <th id="items_itemlost">' + _("Perdu") + '</th>'
+                + '      <th id="items_withdrawn">' + _("Retiré des collections") + '</th>'
+                + '      <th id="items_paidfor">' + _("Chantiers") + '</th>'
                 + '      <th id="items_itemnotes">' + _("Note") + '</th>'
-                + '      <th id="items_materials">' + _("Materials") + '</th>'
-                + '      <th id="items_checkouts">' + _("Checkouts") + '</th>'
-                + '      <th id="items_totalitems">' + _("Total items") + '</th>'
-                + '      <th id="items_dateaccessioned">' + _("Created date") + '</th>'
-                + '      <th id="items_datelastborrowed">' + _("Last checkout date ") + '</th>'
-                + '      <th id="items_datelastseen">' + _("Last seen ") + '</th>'
-                + '      <th id="items_other_sudoc">' + _("Total in Sudoc ") + '</th>'
+                + '      <th id="items_materials">' + _("Message retour") + '</th>'
+                + '      <th id="items_checkouts">' + _("Total de prêts") + '</th>'
+                + '      <th id="items_totalitems">' + _("Total d'exemplaires") + '</th>'
+                + '      <th id="items_dateaccessioned">' + _("Date d'entrée") + '</th>'
+                + '      <th id="items_datelastborrowed">' + _("Dernier prêt ") + '</th>'
+                + '      <th id="items_datelastseen">' + _("Vu en dernier ") + '</th>'
+                + '      <th id="items_other_sudoc">' + _("Total Sudoc ") + '</th>'
                 + '      <th id=""></th>'
                 + '    </tr>'
             var table = ''
@@ -336,7 +344,7 @@
                 .html(_("Go to advanced search"));
             var editSearchLink = $('<a>')
                 .attr('href', '#')
-                .html(_("Edit search"))
+                .html(_("Modifier la recherche"))
                 .addClass('btn btn-default btn-xs')
                 .on('click', function(e) {
                     e.preventDefault();
@@ -345,7 +353,7 @@
 
             var csvExportLink = $('<a>')
                 .attr('href', '#')
-                .html(_("Export results to CSV"))
+                .html(_("Export CSV"))
                 .addClass('btn btn-default btn-xs')
                 .on('click', function(e) {
                     e.preventDefault();
@@ -355,7 +363,7 @@
                 });
             var barcodesExportLink = $('<a>')
                 .attr('href', '#')
-                .html(_("Export results to barcodes file"))
+                .html(_("Export des codes-barres"))
                 .addClass('btn btn-default btn-xs')
                 .on('click', function(e) {
                     e.preventDefault();
@@ -372,15 +380,14 @@
                 .append(barcodesExportLink);
 
             var results_heading = $('<div>').addClass('results-heading')
-                .append("<h1>" + _("Item search results") + "</h1>")
-                .append($('<p>').append(advSearchLink))
+                .append("<h1>" + _("Résultats de la recherche d'exemplaires") + "</h1>")
                 .append(editSearchAndExportLinks);
             $('#results-wrapper').empty()
                 .append(results_heading)
                 .append(table);
 
             var params = [];
-            $form.find('select:not(:disabled) option:selected,input[type="text"]:not(:disabled),input[type="hidden"]:not(:disabled),input[type="radio"]:checked').each(function() {
+            $form.find('select:not(:disabled) option:selected,input[type="text"]:not(:disabled),input[type="hidden"]:not(:disabled),input[type="radio"]:checked,input[type="checkbox"]:checked').each(function() {
                 if ( $(this).prop('tagName').toLowerCase() == 'option' ) {
                     var name = $(this).parents('select').first().attr('name');
                     var value = $(this).val();
@@ -394,9 +401,9 @@
                 'bDestroy': true,
                 'bServerSide': true,
                 'bProcessing': true,
-                'sAjaxSource': '/plugin/Koha/Plugin/Fr/UnivRennes2/ItemSearch/intranet/items-search.pl',
+                'sAjaxSource': '/cgi-bin/koha/plugins/run.pl',
                 'fnServerData': function(sSource, aoData, fnCallback) {
-                    aoData.push( { 'name': 'format', 'value': 'json' } );
+                    aoData.push( { 'name': 'format', 'value': 'json', 'class': 'Koha::Plugin::Fr::UnivRennes2::ItemSearch', 'method': 'tool' } );
                     for (i in params) {
                         aoData.push(params[i]);
                     }
