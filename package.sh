@@ -1,4 +1,4 @@
-PROJECTNAME="{PROJECT}"
+PROJECTNAME="koha-plugin-check-sudoc"
 FILEPATH="Koha/Plugin/Fr/UnivRennes2"
-FILENAME="{PACKAGE}.pm"
-VERSION="{VERSION}"
+FILENAME="CheckSudoc.pm"
+VERSION="0.1"

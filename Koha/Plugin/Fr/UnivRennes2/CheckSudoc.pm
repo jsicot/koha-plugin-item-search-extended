@@ -1,4 +1,4 @@
-package Koha::Plugin::Fr::UnivRennes2::{PACKAGE};
+package Koha::Plugin::Fr::UnivRennes2::CheckSudoc;
 
 use utf8;
 use Modern::Perl;
@@ -9,14 +9,14 @@ our $VERSION = '{VERSION}';
 
 ## Here is our metadata, some keys are required, some are optional
 our $metadata = {
-    name            => '{NAME}',
-    author          => '{AUTHOR}',
-    date_authored   => '{CREATION_DATE}',
+    name            => 'Check Sudoc',
+    author          => 'Julien Sicot',
+    date_authored   => '2019-07-09',
     date_updated    => '{UPDATE_DATE}',
-    minimum_version => '{MIN_KOHA_VERSION}',
+    minimum_version => '18.110000',
     maximum_version => undef,
     version         => $VERSION,
-    description     => '{DESCRIPTION}',
+    description     => 'This plugin uses micro webservices from SUDOC (Abes) to add some controls and alerts on records in the staff interface (check holdings sync with the sudoc, merged or duplicate or local records detection, etc).',
 };
 
 sub new {
