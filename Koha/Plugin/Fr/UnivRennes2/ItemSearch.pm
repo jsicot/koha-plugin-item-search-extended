@@ -348,15 +348,27 @@ sub tool {
 	            
 	            if (defined $sudocrun and $sudocrun eq "sudocRun"){
 		            if (defined $ppn and length $ppn){
+
 			          if (($sudoc->getRcrFromPpn($ppn) ne "error") && $sudoc->getRcrFromPpn($ppn) ne "null") {
 			           my (@rcr) = $sudoc->getRcrFromPpn($ppn);
 		               if( @rcr >= 1 ){
 		                    my $rcr_count = scalar(@rcr); 
-		            	    $item->{sudoc_other} = $rcr_count;
+							my $sudocPlugin = Koha::Plugin::Fr::UnivRennes2::CheckSudoc->new();
+							my (@allmyrcr) = split(/\|/, $sudocPlugin->retrieve_data('rcr'));
+
+							my $count = do {
+								my %seen;
+								@seen{@rcr} = ();
+								my $c;
+								foreach my $r ( @allmyrcr ) {
+									$c++ if exists $seen{$r};
+								}
+								$c;
+							};
+							$item->{sudoc_other} = $count . '/' . $rcr_count;
 		                } 
 					   }
-					   else { $item->{sudoc_other} = "error" ; }
-		
+					   else { $item->{sudoc_other} = "error" ; }		
 					  }
 					else {
 						 $item->{sudoc_other} = "";
