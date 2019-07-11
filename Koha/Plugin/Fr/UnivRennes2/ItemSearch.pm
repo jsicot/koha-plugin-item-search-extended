@@ -350,22 +350,24 @@ sub tool {
 		            if (defined $ppn and length $ppn){
 
 			          if (($sudoc->getRcrFromPpn($ppn) ne "error") && $sudoc->getRcrFromPpn($ppn) ne "null") {
-			           my (@rcr) = $sudoc->getRcrFromPpn($ppn);
-		               if( @rcr >= 1 ){
-		                    my $rcr_count = scalar(@rcr); 
+			           my (@allrcr) = $sudoc->getRcrFromPpn($ppn);
+		               if( @allrcr >= 1 ){
+		                    my $allrcr_count = scalar(@allrcr); 
+							
 							my $sudocPlugin = Koha::Plugin::Fr::UnivRennes2::CheckSudoc->new();
 							my (@allmyrcr) = split(/\|/, $sudocPlugin->retrieve_data('rcr'));
 
-							my $count = do {
+							my $myrcr_count = do {
 								my %seen;
-								@seen{@rcr} = ();
+								@seen{@allrcr} = ();
 								my $c;
-								foreach my $r ( @allmyrcr ) {
-									$c++ if exists $seen{$r};
+								foreach my $rcr ( @allmyrcr ) {
+									$c++ if exists $seen{$rcr};
 								}
 								$c;
 							};
-							$item->{sudoc_other} = $count . '/' . $rcr_count;
+
+							$item->{sudoc_other} = $myrcr_count . '/' . $allrcr_count;
 		                } 
 					   }
 					   else { $item->{sudoc_other} = "error" ; }		
@@ -377,11 +379,9 @@ sub tool {
 				else {
 						 $item->{sudoc_other} = "";
 					}
-				            
-	
+				            	
 				my $count = $PluginClass->get_totalitems($item->{biblionumber});
 				$item->{totalitems} = $count;
-	
 	            
 	        }
 	    }
@@ -409,11 +409,6 @@ sub tool {
 	
 	    exit;
 	}
-
-
-
-
-
 
 	# Display the search form
 	
