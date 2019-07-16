@@ -123,7 +123,7 @@ sub tool {
 	                push @f, $columns[$i];
 	                push @c, 'and';
 	
-	                if ( grep /^$columns[$i]$/, qw( ccode homebranch holdingbranch location itemtype itype notforloan itemlost withdrawn paidfor itemnotes materials dateaccessioned datelastborrowed datelastseen) ) {
+	                if ( grep /^$columns[$i]$/, qw( ccode homebranch holdingbranch issues location itemtype itype notforloan itemlost withdrawn paidfor itemnotes materials dateaccessioned datelastborrowed datelastseen ) ) {
 	                    push @q, "$word";
 	                    push @op, '=';
 	                } else {
@@ -144,7 +144,14 @@ sub tool {
 	    $cgi->param('rows', 0);
 	} elsif (defined $format and $format eq 'barcodes') {
 	    # Retrieve all results
-	    $cgi->param('rows', 0);
+	    $cgi->param('rows', 0);	
+
+	} elsif	(defined $format and $format eq 'batchmod') {
+	    # Retrieve all results
+		$cgi->param('rows', 0);	
+
+	    	                     
+            
 	} elsif (defined $format) {
 	    die "Unsupported format $format";
 	}
@@ -187,7 +194,7 @@ sub tool {
 	        filters => [],
 	    };
 	
-	    foreach my $p (qw(homebranch holdingbranch location itemtype itype ccode issues datelastborrowed notforloan itemlost withdrawn paidfor itemnotes materials dateaccessioned datelastborrowed datelastseen)) {
+	    foreach my $p (qw(homebranch holdingbranch location itemtype itype ccode issues notforloan itemlost withdrawn paidfor itemnotes materials dateaccessioned datelastborrowed datelastseen )) {
 	        if (my @q = $cgi->multi_param($p)) {
 	            if ($q[0] ne '') {
 	                my $f = {
@@ -288,12 +295,52 @@ sub tool {
 	            type => 'text/plain',
 	            attachment => 'barcodes.txt',
 	        });
-	
+		
 	        foreach my $item (@$results) {
 	            print $item->{barcode} . "\n";
 	        }
 	        exit;
 	    }
+		if ($format eq 'batchmod') {
+			   
+
+			my @barcodes;
+			foreach my $item (@$results) {
+			 	push (@barcodes, $item->{barcode} );
+	        } 
+
+			use CGI;
+			                         
+			my $fBatch = new CGI;   
+
+			print $fBatch->header,                    
+			$fBatch->start_html(-title=>'Batchmod Items form'),
+			$fBatch->start_form(
+				-name    => 'batchmod_form',
+				-method  => 'POST',
+				-action => '/cgi-bin/koha/tools/batchMod.pl', 
+			),
+			$fBatch->hidden( -name => "filecontent", -default => "barcode_file", -override => 1 ), 
+			$fBatch->hidden( -name => "uploadfile", -default => "", -override => 1 ),
+			$fBatch->hidden( -name => "op", -default => "show", -override => 1 ),
+			$fBatch->hidden
+			(
+				-name=>'barcodelist', 
+				-value=> join("\r", @barcodes)
+			), 
+			$fBatch->end_form();
+			print q|
+				<script language="JavaScript">
+					document.batchmod_form.submit();
+				</script>
+				|;			
+			print $fBatch->end_html;
+	    }
+
+
+
+
+
 	
 	    if ($results) {
 	        # Get notforloan labels

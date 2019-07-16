@@ -60,8 +60,8 @@
 [% BLOCK form_field_select_text %]
   <div class="form-field form-field-select-text">
     <select name="c" class="form-field-conjunction" disabled="disabled">
-      <option value="and">AND</option>
-      <option value="or">OR</option>
+      <option value="and">ET</option>
+      <option value="or">OU</option>
     </select>
     <select name="f" class="form-field-column">
       [% INCLUDE form_field_select_option value='barcode' %]
@@ -98,11 +98,11 @@
   <div class="form-field">
     <label class="form-field-label">[% INCLUDE form_label label=name %]:</label>
     <input type="radio" name="[% name | html %]" id="[% name | html %]_indifferent" value="" checked="checked"/>
-    <label for="[% name | html %]_indifferent">Ignore</label>
+    <label for="[% name | html %]_indifferent">Ignorer</label>
     <input type="radio" name="[% name | html %]" id="[% name | html %]_yes" value="yes" />
-    <label for="[% name | html %]_yes">Yes</label>
+    <label for="[% name | html %]_yes">Oui</label>
     <input type="radio" name="[% name | html %]" id="[% name | html %]_no" value="no" />
-    <label for="[% name | html %]_no">No</label>
+    <label for="[% name | html %]_no">Non</label>
   </div>
 [% END %]
 
@@ -179,20 +179,20 @@
           </fieldset>
           <fieldset>
             [% INCLUDE form_field_select_text %]
-            <p class="hint">You can use the following wildcard characters: % _</p>
-            <p class="hint">% matches any number of characters</p>
-            <p class="hint">_ matches only a single character</p>
+            <p class="hint">Vous pouvez utiliser les caractères de remplacement suivants: '%' ou '_'</p>
+            <p class="hint">'%' remplace plusieurs caractères</p>
+            <p class="hint">'_' remplace un seul caractère</p>
           </fieldset>
           <fieldset>
             <div class="form-field">
               <label class="form-field-label" for="itemcallnumber_from">De la cote:</label>
               <input type="text" id="itemcallnumber_from" name="itemcallnumber_from" value="" />
-              <span class="hint">(inclusive)</span>
+              <span class="hint">(bornes incluses)</span>
             </div>
             <div class="form-field">
               <label class="form-field-label" for="itemcallnumber_to">À la cote:</label>
               <input type="text" id="itemcallnumber_to" name="itemcallnumber_to" value="" />
-              <span class="hint">(inclusive)</span>
+              <span class="hint">(bornes incluses)</span>
             </div>
             [% INCLUDE form_field_radio_yes_no name="damaged" %]
             <div class="form-field">
@@ -208,32 +208,32 @@
             <div class="form-field">
               <label class="form-field-label" for="datelastborrowed_op">Dernier emprunt:</label>
               <select id="datelastborrowed_op" name="datelastborrowed_op">
-                <option value=">">After</option>
-                <option value="<">Before</option>
-                <option value="=">On</option>
+                <option value=">">Après</option>
+                <option value="<">Avant</option>
+                <option value="=">Est</option>
               </select>
-              <input type="text" name="datelastborrowed" />
-              <span class="hint">ISO Format (YYYY-MM-DD)</span>
+              <input type="text" name="datelastborrowed" value="" class="datepicker"/>
+              <span class="hint">ISO Format (AAAA-MM-JJ)</span>
             </div>
             <div class="form-field">
               <label class="form-field-label" for="dateaccessioned_op">Date d'entrée:</label>
               <select id="dateaccessioned_op" name="dateaccessioned_op">
-                <option value=">">After</option>
-                <option value="<">Before</option>
-                <option value="=">On</option>
+                <option value=">">Après</option>
+                <option value="<">Avant</option>
+                <option value="=">Est</option>
               </select>
-              <input type="text" name="dateaccessioned" />
-              <span class="hint">ISO Format (YYYY-MM-DD)</span>
+              <input type="text" name="dateaccessioned" value="" class="datepicker" />
+              <span class="hint">ISO Format (AAAA-MM-JJ)</span>
             </div>
             <div class="form-field">
               <label class="form-field-label" for="datelastseen_op">Vu en dernier:</label>
               <select id="datelastseen_op" name="datelastseen_op">
-                <option value=">">After</option>
-                <option value="<">Before</option>
-                <option value="=">On</option>
+                <option value=">">Après</option>
+                <option value="<">Avant</option>
+                <option value="=">Est</option>
               </select>
-              <input type="text" name="datelastseen" />
-              <span class="hint">ISO Format (YYYY-MM-DD)</span>
+              <input type="text" name="datelastseen" value="" class="datepicker"/>
+              <span class="hint">ISO Format (AAAA-MM-JJ)</span>
             </div>
           </fieldset>
           <fieldset>
@@ -245,9 +245,10 @@
           <fieldset>
             <div class="form-field-radio">
               <label>Sortie:</label>
-              <input type="radio" id="format-html" name="format" value="html" checked="checked" /> <label for="format-html">html</label>
-              <input type="radio" id="format-csv" name="format" value="csv" /> <label for="format-csv">CSV</label>
-              <input type="radio" id="format-barcodes" name="format" value="barcodes"/> <label for="format-barcodes">fichier code-barres</label>
+              <input type="radio" id="format-html" name="format" value="html" checked="checked" /> <label for="format-html">html</label> 
+              <input type="radio" id="format-csv" name="format" value="csv" /> <label for="format-csv">CSV</label> 
+              <input type="radio" id="format-barcodes" name="format" value="barcodes"/> <label for="format-barcodes">fichier code-barres</label> 
+              <input type="radio" id="format-batchmod" name="format" value="batchmod" style="display:none"/> 
             </div>
           </fieldset>
       </form>
@@ -371,13 +372,26 @@
                     $('#itemsearchform').submit();
                     $('#format-html').prop('checked', true);
               });
+              var batchmodLink = $('<a>')
+                .attr('href', '#')
+                .html(_("Modifier les exemplaires "))
+                .addClass('btn btn-default btn-xs')
+                .attr('id', 'batchmodbutton')
+                .on('click', function(e) {
+                    e.preventDefault();
+                    $('#format-batchmod').prop('checked', true);
+                    $('#itemsearchform').submit();
+                    $('#format-html').prop('checked', true);
+              });
 
             var editSearchAndExportLinks = $('<p>')
                 .append(editSearchLink)
                 .append(' | ')
                 .append(csvExportLink)
                 .append(' ')
-                .append(barcodesExportLink);
+                .append(barcodesExportLink)
+                .append(' ')
+                .append(batchmodLink);
 
             var results_heading = $('<div>').addClass('results-heading')
                 .append("<h1>" + _("Résultats de la recherche d'exemplaires") + "</h1>")
@@ -414,6 +428,10 @@
                         'data': aoData,
                         'success': function(json){
                             fnCallback(json);
+                            var iTotalRecords = json.iTotalRecords;
+                            if(iTotalRecords > 2000 ) {
+	                            $('#batchmodbutton').remove();
+                            }
                         }
                     });
                 },
@@ -439,11 +457,11 @@
                     { 'sName': 'itemnotes' },
                     { 'sName': 'materials' },
                     { 'sName': 'issues' },
-                    { 'sName': 'totalitems' },
+                    { 'sName': 'totalitems', 'bSortable': false },
                     { 'sName': 'dateaccessioned' },
                     { 'sName': 'datelastborrowed' },
                     { 'sName': 'datelastseen' },
-                    { 'sName': 'other_sudoc' },
+                    { 'sName': 'other_sudoc', 'bSortable': false },
                     { 'sName': 'checkbox', 'bSortable': false }
                 ],
                 "sPaginationType": "full_numbers"
@@ -451,17 +469,17 @@
                 'sPlaceHolder': 'head:after',
                 'aoColumns': [
                     { 'type': 'text' },
+                    { 'type': 'date' },
                     { 'type': 'text' },
-                    { 'type': 'text' },
-                    { 'type': 'text' },
-                    { 'type': 'text' },
+                    { 'type': 'html' },
+                    { 'type': 'html' },
                     { 'type': 'text' },
                     [% IF itemtypes.size %]
                         { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => itemtypes %] },
                     [% ELSE %]
                         null,
                     [% END %]
-                    { 'type': 'text' },
+                    { 'type': 'html' },
                     { 'type': 'text' },
                     { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => branches %] },
                     { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => branches %] },
@@ -495,14 +513,14 @@
                     [% ELSE %]
                         null,
                     [% END %]
-                    { 'type': 'text' },
-                    { 'type': 'text' },
-                    { 'type': 'text' },
-                    { 'type': 'text' },
+                    { 'type': 'html' },
+                    { 'type': 'html' },
+                    { 'type': 'num' },
+                    null,
                     { 'type': 'date' },
                     { 'type': 'date' },
                     { 'type': 'date' },
-                    { 'type': 'date' },
+                    null,
                     null
                 ]
             });
@@ -512,8 +530,8 @@
             $('#toolbar').fixFloat();
             // Add the "New field" link.
             var form_field = $('div.form-field-select-text').last()
-            var NEW_FIELD = _("New field");
-      var button_field_new = $('<a href="#" class="button-field-new" title="Add a new field"><i class="fa fa-plus"></i> ' + NEW_FIELD + '</a>');
+            var NEW_FIELD = _(" Nouveau");
+      var button_field_new = $('<a href="#" class="button-field-new" title="Ajouter un nouveau champ"><i class="fa fa-plus"></i> ' + NEW_FIELD + '</a>');
       button_field_new.click(function(e) {
           e.preventDefault();
           addNewField( $(this) );
